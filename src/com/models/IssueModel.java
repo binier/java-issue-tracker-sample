@@ -36,7 +36,6 @@ public class IssueModel implements ToJsonStr {
             throw new SQLException("creating issue failed, no rows affected");
         }
 
-        // TODO: return inserted `id`
         try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
             if (generatedKeys.next()) {
                 return generatedKeys.getLong(1);
