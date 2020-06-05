@@ -8,6 +8,8 @@ import java.net.Socket;
 
 /**
  * <h2>Socket Server</h2>
+ *
+ * Handles incoming connection requests and passes them to {@link ClientHandler ClientHandler}.
  */
 public class Server implements Runnable {
     int port;
