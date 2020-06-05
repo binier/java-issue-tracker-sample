@@ -63,6 +63,8 @@ public class ClientHandler {
     /**
      * Waits and reads input from socket client, parses incoming messages
      * and takes corresponding actions.
+     * <br/><br/>
+     * <b>Note</b>: each command must be contained in a single line.
      */
     public void runReader() {
         try {
