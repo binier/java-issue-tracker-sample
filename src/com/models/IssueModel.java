@@ -1,10 +1,7 @@
 package com.models;
 
 import java.io.IOException;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Date;
 import com.database.Database;
 import com.google.gson.Gson;
@@ -22,7 +19,8 @@ public class IssueModel implements ToJsonStr {
 
     public static long insert(IssueModel issue) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
-                "INSERT INTO issues (title, description, severity, status) VALUES (?, ?, ?, ?);"
+                "INSERT INTO issues (title, description, severity, status) VALUES (?, ?, ?, ?);",
+                Statement.RETURN_GENERATED_KEYS
         );
 
         preparedStatement.setString(1, issue.getTitle());
