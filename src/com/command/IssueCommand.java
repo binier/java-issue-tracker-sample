@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.bind.SqlDateTypeAdapter;
 import com.json.ToJsonStr;
+import com.models.CommentModel;
 import com.models.IssueModel;
 
 /**
@@ -46,6 +47,16 @@ public class IssueCommand implements Command {
     }
 
     /**
+     * build {@link CommentModel Comment} from {@link IssueCommand#arg IssueCommand.arg}.
+     */
+    CommentModel argToCommentModel() {
+        return new CommentModel(
+                this.arg.get("text").getAsString(),
+                this.arg.get("issueId").getAsLong()
+        );
+    }
+
+    /**
      * <h2>Executes current command</h2>
      *
      * @return any object which implements {@link ToJsonStr ToJsonStr}
@@ -65,6 +76,12 @@ public class IssueCommand implements Command {
                 return IssueModel.update(
                         this.arg.get("id").getAsLong(),
                         this.argToIssueModel()
+                );
+            case "add_comment":
+                return this.argToCommentModel().save();
+            case "get_issue_comments":
+                return CommentModel.getByIssueId(
+                        this.arg.get("issueId").getAsLong()
                 );
             default:
                 throw new UnknownActionException(this.action);

@@ -87,7 +87,7 @@ public class IssueModel implements ToJsonStr {
     }
 
     static IssueModel fromResultSet(ResultSet rs) throws SQLException {
-        rs.next();
+        if (!rs.next()) return null;
         IssueModel issue = new IssueModel(
                 rs.getString("title"),
                 rs.getString("description"),
