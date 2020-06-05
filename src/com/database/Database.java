@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class Database {
     private static Database instance;
 
-    private static final String CONNECTION_STRING =  "jdbc:mysql://172.22.0.2:3306/students?useSSL=false";
+    private static final String CONNECTION_STRING =  "jdbc:mysql://localhost:3306/issues?allowMultiQueries=true";
     private static final String USER = "root";
     private static final String PASSWORD = "root";
 
