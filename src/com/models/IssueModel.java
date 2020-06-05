@@ -78,11 +78,11 @@ public class IssueModel implements ToJsonStr {
         return IssueModel.getById(id);
     }
 
-    public static void delete(String title) throws SQLException, IOException {
+    public static void delete(long id) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
-                "DELETE * FROM issues WHERE title=?;"
+                "DELETE * FROM issues WHERE id=?;"
         );
-        preparedStatement.setString(1,title);
+        preparedStatement.setLong(1, id);
         preparedStatement.execute();
     }
 
