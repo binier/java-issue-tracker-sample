@@ -9,6 +9,11 @@ import com.google.gson.internal.bind.SqlDateTypeAdapter;
 import com.json.ToJsonStr;
 import com.models.IssueModel;
 
+/**
+ * <h2>Command for `Issue` table</h2>
+ *
+ * Deserializes command and provides a way to {@link IssueCommand#execute execute} it.
+ */
 public class IssueCommand implements Command {
     private String action;
     private JsonObject arg;
@@ -28,6 +33,9 @@ public class IssueCommand implements Command {
         this.arg = arg;
     }
 
+    /**
+     * build {@link IssueModel Issue} from {@link IssueCommand#arg IssueCommand.arg}.
+     */
     IssueModel argToIssueModel() {
         return new IssueModel(
                 this.arg.get("title").getAsString(),
@@ -37,6 +45,15 @@ public class IssueCommand implements Command {
         );
     }
 
+    /**
+     * <h2>Executes current command</h2>
+     *
+     * @return any object which implements {@link ToJsonStr ToJsonStr}
+     * and therefore can be converted to Json string.
+     * @throws IOException
+     * @throws SQLException
+     * @throws UnknownActionException if action was not recognized
+     */
     @Override
     public ToJsonStr execute() throws IOException, SQLException, UnknownActionException {
         switch (this.action) {
