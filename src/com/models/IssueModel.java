@@ -12,21 +12,21 @@ public class IssueModel {
 
     private String title;
     private String description;
-    private Date date;
     private int severity;
     private String status;
+    private Date createdDate;
     private Date statusChangeDate;
 
     public static void insert(IssueModel issue) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
-                "INSERT INTO issues (title, description, date, severity, status, statusChangeDate) VALUES (?, ?, ?, ?, ?, ?);"
+                "INSERT INTO issues (title, description, severity, status, createdDate, statusChangeDate) VALUES (?, ?, ?, ?, ?, ?);"
         );
         preparedStatement.setString(1, issue.getTitle());
         preparedStatement.setString(2, issue.getDescription());
-        preparedStatement.setDate(3, (java.sql.Date) issue.getDate());
-        preparedStatement.setInt(4, issue.getSeverity());
-        preparedStatement.setString(5, issue.getStatus());
-        preparedStatement.setDate(6, (java.sql.Date) issue.getDate());
+        preparedStatement.setInt(3, issue.getSeverity());
+        preparedStatement.setString(4, issue.getStatus());
+        preparedStatement.setDate(5, (java.sql.Date) issue.getCreatedDate());
+        preparedStatement.setDate(6, (java.sql.Date) issue.getCreatedDate());
 
         preparedStatement.execute();
     }
@@ -49,7 +49,7 @@ public class IssueModel {
 
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
                 String.format(
-                        "UPDATE issues SET title=?, description=?, date=?, severity=?, status=? WHERE title={0}",
+                        "UPDATE issues SET title=?, description=?, severity=?, status=?, statusChangeDate=? WHERE title={0}",
                         oldContent.getTitle()
                 )
         );
@@ -58,9 +58,8 @@ public class IssueModel {
 
         preparedStatement.setString(1, newContent.getTitle());
         preparedStatement.setString(2, newContent.getDescription());
-        preparedStatement.setDate(3, (java.sql.Date) newContent.getDate());
-        preparedStatement.setInt(4, newContent.getSeverity());
-        preparedStatement.setString(5, newContent.getStatus());
+        preparedStatement.setInt(3, newContent.getSeverity());
+        preparedStatement.setString(4, newContent.getStatus());
         preparedStatement.setDate(5, statusChangeDate);
 
         preparedStatement.execute();
@@ -80,7 +79,7 @@ public class IssueModel {
         this.severity = severity;
         this.status = status;
 
-        date = new Date(System.currentTimeMillis());
+        this.createdDate = new Date(System.currentTimeMillis());
     }
 
     public String getTitle() {
@@ -99,14 +98,6 @@ public class IssueModel {
         this.description = description;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public int getSeverity() {
         return severity;
     }
@@ -121,6 +112,14 @@ public class IssueModel {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date date) {
+        this.createdDate = date;
     }
 
     public Date getStatusChangeDate() {
