@@ -6,14 +6,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class CreateDatabase {
-    private static final String CONNECTION_STRING = "jdbc:mysql://localhost:3306/?useSSL=false";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
-    private static final String DB_NAME = "students";
 
-    private Connection connection;
-
+public class CreateDatabase extends Database {
     public static void main(String[] args) throws SQLException, IOException {
         createDatabase();
         createIssuesTable();
@@ -21,16 +15,12 @@ public class CreateDatabase {
     }
 
     public static void createDatabase() throws SQLException, IOException {
-        Connection connection = null;
-        Statement statement = null;
         try {
-            connection = DriverManager.getConnection(CONNECTION_STRING, USER, PASSWORD);
-            statement = connection.createStatement();
-            String createDB = "CREATE DATABASE issues";
+            Statement stmt = getInstance().getConnection().createStatement();
+            String createDB = "CREATE DATABASE " + DB_NAME;
             //To create database
-            statement.executeUpdate(createDB);
+            stmt.executeUpdate(createDB);
             System.out.println("Database created!");
-
 
         } catch (SQLException sqlException) {
             if (sqlException.getErrorCode() == 1007) {
@@ -46,11 +36,8 @@ public class CreateDatabase {
     }
 
     public static void createIssuesTable() throws SQLException, IOException {
-        Connection conn = null;
-        Statement stmt = null;
         try {
-            conn = DriverManager.getConnection(CONNECTION_STRING + "/issues", USER, PASSWORD);
-            stmt = conn.createStatement();
+            Statement stmt = getInstance().getConnection().createStatement();
             String createTable = "CREATE TABLE IF NOT EXISTS issues (id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, title VARCHAR(255), description VARCHAR(255), severity INTEGER, status VARCHAR(255),createdDate DATETIME DEFAULT CURRENT_TIMESTAMP,statusChangeDate DATETIME )";
             //To create database
             stmt.executeUpdate(createTable);
@@ -64,11 +51,8 @@ public class CreateDatabase {
     }
 
     public static void createIssuesTrigger() throws SQLException, IOException {
-        Connection conn = null;
-        Statement stmt = null;
         try {
-            conn = DriverManager.getConnection(CONNECTION_STRING + "/issues", USER, PASSWORD);
-            stmt = conn.createStatement();
+            Statement stmt = getInstance().getConnection().createStatement();
 
             String createUpdateTrigger = String.join("\n"
                     , "DELIMITER $$"
@@ -82,11 +66,10 @@ public class CreateDatabase {
                     , "END$$"
                     , "DELIMITER ;"
             );
-            System.out.println(createUpdateTrigger);
+//            System.out.println(createUpdateTrigger);
 
-            //To create database
             stmt.executeUpdate(createUpdateTrigger);
-            System.out.println("Issues_Update Trigger created!");
+            System.out.println("issues_before_Update Trigger created!");
 
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -95,4 +78,6 @@ public class CreateDatabase {
         }
     }
 
+    public CreateDatabase() throws SQLException, IOException {
+    }
 }

@@ -8,9 +8,11 @@ import java.sql.SQLException;
 public class Database {
     private static Database instance;
 
-    private static final String CONNECTION_STRING =  "jdbc:mysql://localhost:3306/issues?allowMultiQueries=true";
+    protected static final String DB_NAME = "issue_tracker";
+    protected static final String OPTIONS = "?useSSL=false&createDatabaseIfNotExist=true";
+    protected static final String CONNECTION_STRING =  "jdbc:mysql://127.0.0.1:3306/" + DB_NAME + OPTIONS;
     private static final String USER = "root";
-    private static final String PASSWORD = "root";
+    private static final String PASSWORD = "";
 
     private Connection connection;
 
