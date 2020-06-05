@@ -1,5 +1,7 @@
 package com.socket;
 
+import com.command.IssueCommand;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -72,7 +74,7 @@ public class ClientHandler {
             String message;
             while((message = in.readLine()) != null) {
                 try {
-                    this.send(MessageParser.parse(message).execute().toString());
+                    this.send(IssueCommand.fromJsonStr(message).execute().toString());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

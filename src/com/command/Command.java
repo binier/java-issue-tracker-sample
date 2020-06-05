@@ -1,7 +1,7 @@
 package com.command;
 
-public class Command {
-    public Result execute() {
-        throw new UnsupportedOperationException();
-    }
+import com.json.ToJsonStr;
+
+public interface Command {
+    ToJsonStr execute() throws Exception;
 }

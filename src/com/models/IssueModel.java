@@ -7,9 +7,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import com.database.Database;
+import com.google.gson.Gson;
+import com.json.ToJsonStr;
 
-public class IssueModel {
+public class IssueModel implements ToJsonStr {
 
+    private Integer id;
     private String title;
     private String description;
     private int severity;
@@ -17,7 +20,7 @@ public class IssueModel {
     private Date createdDate;
     private Date statusChangeDate;
 
-    public static void insert(IssueModel issue) throws SQLException, IOException {
+    public static int insert(IssueModel issue) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
                 "INSERT INTO issues (title, description, severity, status, createdDate) VALUES (?, ?, ?, ?, ?);"
         );
@@ -29,6 +32,13 @@ public class IssueModel {
         preparedStatement.setDate(5, (java.sql.Date) new Date(System.currentTimeMillis()));
 
         preparedStatement.execute();
+
+        // TODO: return inserted `id`
+        return 1;
+    }
+
+    public static IssueModel getById(int id) {
+        throw new UnsupportedOperationException();
     }
 
     public static void readByTitle(String issueTitle) throws SQLException, IOException {
@@ -39,18 +49,18 @@ public class IssueModel {
         preparedStatement.execute();
     }
 
-    public static void update(IssueModel newContent, IssueModel oldContent) throws SQLException, IOException {
+    public static IssueModel update(int id, IssueModel newContent) throws SQLException, IOException {
         DatabaseMetaData md = Database.getInstance().getConnection().getMetaData();
         ResultSet rs = md.getColumns(null, null, "issues", "title");
         if(rs.next()){
-            insert(newContent);
-            return;
+            newContent.id = insert(newContent);
+            return newContent;
         }
 
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
                 String.format(
-                        "UPDATE issues SET title=?, description=?, severity=?, status=?, statusChangeDate=? WHERE title={0}",
-                        oldContent.getTitle()
+                        "UPDATE issues SET title=?, description=?, severity=?, status=?, statusChangeDate=? WHERE id={0}",
+                        id
                 )
         );
 
@@ -61,6 +71,10 @@ public class IssueModel {
         preparedStatement.setDate(5, (java.sql.Date) new Date(System.currentTimeMillis()));
 
         preparedStatement.execute();
+
+        // TODO: return result from update query if possible to get all the fields.
+        newContent.id = id;
+        return newContent;
     }
 
     public static void delete(String title) throws SQLException, IOException {
@@ -118,7 +132,16 @@ public class IssueModel {
         return statusChangeDate;
     }
 
-    public void setStatusChangeDate(Date statusChangeDate) {
-        this.statusChangeDate = statusChangeDate;
+    public IssueModel save() throws SQLException, IOException {
+        if (this.id == null) {
+            this.id = IssueModel.insert(this);
+        } else {
+            IssueModel.update(this.id, this);
+        }
+        return this;
+    }
+
+    public String toJsonStr() {
+        return new Gson().toJson(this);
     }
 }
