@@ -22,19 +22,29 @@ public class IssueModel implements ToJsonStr {
 
     public static long insert(IssueModel issue) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
-                "INSERT INTO issues (title, description, severity, status, createdDate) VALUES (?, ?, ?, ?, ?);"
+                "INSERT INTO issues (title, description, severity, status) VALUES (?, ?, ?, ?);"
         );
 
         preparedStatement.setString(1, issue.getTitle());
         preparedStatement.setString(2, issue.getDescription());
         preparedStatement.setInt(3, issue.getSeverity());
         preparedStatement.setString(4, issue.getStatus());
-        preparedStatement.setDate(5, (java.sql.Date) new Date(System.currentTimeMillis()));
 
-        preparedStatement.execute();
+        int affectedRows = preparedStatement.executeUpdate();
+
+        if (affectedRows == 0) {
+            throw new SQLException("creating issue failed, no rows affected");
+        }
 
         // TODO: return inserted `id`
-        return 1;
+        try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                return generatedKeys.getLong(1);
+            }
+            else {
+                throw new SQLException("creating issue failed, no ID obtained.");
+            }
+        }
     }
 
     public static IssueModel getById(long id) throws SQLException, IOException {
