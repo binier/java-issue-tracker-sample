@@ -17,6 +17,63 @@ public class IssueModel {
     private String status;
     private Date statusChangeDate;
 
+    public static void insert(IssueModel issue) throws SQLException, IOException {
+        PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
+                "INSERT INTO issues (title, description, date, severity, status, statusChangeDate) VALUES (?, ?, ?, ?, ?, ?);"
+        );
+        preparedStatement.setString(1, issue.getTitle());
+        preparedStatement.setString(2, issue.getDescription());
+        preparedStatement.setDate(3, (java.sql.Date) issue.getDate());
+        preparedStatement.setInt(4, issue.getSeverity());
+        preparedStatement.setString(5, issue.getStatus());
+        preparedStatement.setDate(6, (java.sql.Date) issue.getDate());
+
+        preparedStatement.execute();
+    }
+
+    public static void readByTitle(String issueTitle) throws SQLException, IOException {
+        PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
+                "SELECT * FROM issues WHERE title=?;"
+        );
+        preparedStatement.setString(1,issueTitle);
+        preparedStatement.execute();
+    }
+
+    public static void update(IssueModel newContent, IssueModel oldContent) throws SQLException, IOException {
+        DatabaseMetaData md = Database.getInstance().getConnection().getMetaData();
+        ResultSet rs = md.getColumns(null, null, "issues", "title");
+        if(rs.next()){
+            insert(newContent);
+            return;
+        }
+
+        PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
+                String.format(
+                        "UPDATE issues SET title=?, description=?, date=?, severity=?, status=? WHERE title={0}",
+                        oldContent.getTitle()
+                )
+        );
+
+        java.sql.Date statusChangeDate = (java.sql.Date) new java.util.Date(System.currentTimeMillis());
+
+        preparedStatement.setString(1, newContent.getTitle());
+        preparedStatement.setString(2, newContent.getDescription());
+        preparedStatement.setDate(3, (java.sql.Date) newContent.getDate());
+        preparedStatement.setInt(4, newContent.getSeverity());
+        preparedStatement.setString(5, newContent.getStatus());
+        preparedStatement.setDate(5, statusChangeDate);
+
+        preparedStatement.execute();
+    }
+
+    public static void delete(String title) throws SQLException, IOException {
+        PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
+                "DELETE * FROM issues WHERE title=?;"
+        );
+        preparedStatement.setString(1,title);
+        preparedStatement.execute();
+    }
+
     public IssueModel(String title, String description, int severity, String status) {
         this.title = title;
         this.description = description;
@@ -73,62 +130,4 @@ public class IssueModel {
     public void setStatusChangeDate(Date statusChangeDate) {
         this.statusChangeDate = statusChangeDate;
     }
-
-    public void insert(IssueModel issue) throws SQLException, IOException {
-        PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
-                "INSERT INTO issues (title, description, date, severity, status, statusChangeDate) VALUES (?, ?, ?, ?, ?, ?);"
-        );
-        preparedStatement.setString(1, issue.getTitle());
-        preparedStatement.setString(2, issue.getDescription());
-        preparedStatement.setDate(3, (java.sql.Date) issue.getDate());
-        preparedStatement.setInt(4, issue.getSeverity());
-        preparedStatement.setString(5, issue.getStatus());
-        preparedStatement.setDate(6, (java.sql.Date) issue.getDate());
-
-        preparedStatement.execute();
-    }
-
-    public void readByTitle(String issueTitle) throws SQLException, IOException {
-        PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
-                "SELECT * FROM issues WHERE title=?;"
-        );
-        preparedStatement.setString(1,issueTitle);
-        preparedStatement.execute();
-    }
-
-    public void update(IssueModel newContent, IssueModel oldContent) throws SQLException, IOException {
-        DatabaseMetaData md = Database.getInstance().getConnection().getMetaData();
-        ResultSet rs = md.getColumns(null, null, "issues", "title");
-        if(rs.next()){
-            insert(newContent);
-            return;
-        }
-
-        PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
-                String.format(
-                        "UPDATE issues SET title=?, description=?, date=?, severity=?, status=? WHERE title={0}",
-                        oldContent.getTitle()
-                )
-        );
-
-        java.sql.Date statusChangeDate = (java.sql.Date) new java.util.Date(System.currentTimeMillis());
-
-        preparedStatement.setString(1, newContent.getTitle());
-        preparedStatement.setString(2, newContent.getDescription());
-        preparedStatement.setDate(3, (java.sql.Date) newContent.getDate());
-        preparedStatement.setInt(4, newContent.getSeverity());
-        preparedStatement.setString(5, newContent.getStatus());
-        preparedStatement.setDate(5, statusChangeDate);
-
-        preparedStatement.execute();
-    }
-
-    public void delete(String title) throws SQLException, IOException {
-        PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
-                "DELETE * FROM issues WHERE title=?;"
-        );
-        preparedStatement.setString(1,title);
-        preparedStatement.execute();
-    }
-
 }
