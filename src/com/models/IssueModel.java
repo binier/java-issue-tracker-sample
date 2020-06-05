@@ -37,8 +37,14 @@ public class IssueModel implements ToJsonStr {
         return 1;
     }
 
-    public static IssueModel getById(int id) {
-        throw new UnsupportedOperationException();
+    public static IssueModel getById(long id) throws SQLException, IOException {
+        PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
+                "SELECT * FROM issues WHERE id=?;"
+        );
+        preparedStatement.setLong(1, id);
+        preparedStatement.execute();
+
+        return IssueModel.fromResultSet(preparedStatement.getResultSet());
     }
 
     public static void readByTitle(String issueTitle) throws SQLException, IOException {
@@ -83,6 +89,21 @@ public class IssueModel implements ToJsonStr {
         );
         preparedStatement.setString(1,title);
         preparedStatement.execute();
+    }
+
+    static IssueModel fromResultSet(ResultSet rs) throws SQLException {
+        IssueModel issue = new IssueModel(
+                rs.getString("title"),
+                rs.getString("description"),
+                rs.getInt("severity"),
+                rs.getString("status")
+        );
+
+        issue.id = rs.getLong("id");
+        issue.createdDate = rs.getDate("createdDate");
+        issue.statusChangeDate = rs.getDate("statusChangeDate");
+
+        return issue;
     }
 
     public IssueModel(String title, String description, int severity, String status) {
