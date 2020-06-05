@@ -10,8 +10,8 @@ import java.sql.Statement;
 public class CreateDatabase extends Database {
     public static void main(String[] args) throws SQLException, IOException {
         createDatabase();
-        createIssuesTable();
-        createIssuesTrigger();
+        createIssueTable();
+        createIssueTrigger();
     }
 
     public static void createDatabase() throws SQLException, IOException {
@@ -35,10 +35,10 @@ public class CreateDatabase extends Database {
         }
     }
 
-    public static void createIssuesTable() throws SQLException, IOException {
+    public static void createIssueTable() throws SQLException, IOException {
         try {
             Statement stmt = getInstance().getConnection().createStatement();
-            String createTable = "CREATE TABLE IF NOT EXISTS issues (id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, title VARCHAR(255), description VARCHAR(255), severity INTEGER, status VARCHAR(255),createdDate DATETIME DEFAULT CURRENT_TIMESTAMP,statusChangeDate DATETIME )";
+            String createTable = "CREATE TABLE IF NOT EXISTS issue (id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, title VARCHAR(255), description VARCHAR(255), severity INTEGER, status VARCHAR(255),createdDate DATETIME DEFAULT CURRENT_TIMESTAMP,statusChangeDate DATETIME )";
             //To create database
             stmt.executeUpdate(createTable);
             System.out.println("Table created!");
@@ -50,14 +50,14 @@ public class CreateDatabase extends Database {
         }
     }
 
-    public static void createIssuesTrigger() throws SQLException, IOException {
+    public static void createIssueTrigger() throws SQLException, IOException {
         try {
             Statement stmt = getInstance().getConnection().createStatement();
 
             String createUpdateTrigger = String.join("\n"
                     , "DELIMITER $$"
-                    , "CREATE TRIGGER issues_before_update"
-                    , "BEFORE UPDATE ON issues"
+                    , "CREATE TRIGGER issue_before_update"
+                    , "BEFORE UPDATE ON issue"
                     , "FOR EACH ROW"
                         , "BEGIN"
                         , "IF OLD.status != NEW.status THEN BEGIN"
@@ -66,10 +66,10 @@ public class CreateDatabase extends Database {
                     , "END$$"
                     , "DELIMITER ;"
             );
-//            System.out.println(createUpdateTrigger);
+            System.out.println(createUpdateTrigger);
 
             stmt.executeUpdate(createUpdateTrigger);
-            System.out.println("issues_before_Update Trigger created!");
+            System.out.println("issue_before_Update Trigger created!");
 
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();

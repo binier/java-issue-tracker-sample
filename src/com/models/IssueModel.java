@@ -19,7 +19,7 @@ public class IssueModel implements ToJsonStr {
 
     public static long insert(IssueModel issue) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
-                "INSERT INTO issues (title, description, severity, status) VALUES (?, ?, ?, ?);",
+                "INSERT INTO issue (title, description, severity, status) VALUES (?, ?, ?, ?);",
                 Statement.RETURN_GENERATED_KEYS
         );
 
@@ -46,7 +46,7 @@ public class IssueModel implements ToJsonStr {
 
     public static IssueModel getById(long id) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
-                "SELECT * FROM issues WHERE id=?;"
+                "SELECT * FROM issue WHERE id=?;"
         );
         preparedStatement.setLong(1, id);
         preparedStatement.execute();
@@ -56,7 +56,7 @@ public class IssueModel implements ToJsonStr {
 
     public static void readByTitle(String issueTitle) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
-                "SELECT * FROM issues WHERE title=?;"
+                "SELECT * FROM issue WHERE title=?;"
         );
         preparedStatement.setString(1,issueTitle);
         preparedStatement.execute();
@@ -64,7 +64,7 @@ public class IssueModel implements ToJsonStr {
 
     public static IssueModel update(long id, IssueModel newContent) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
-                "UPDATE issues SET title=?, description=?, severity=?, status=? WHERE id=?"
+                "UPDATE issue SET title=?, description=?, severity=?, status=? WHERE id=?"
         );
 
         preparedStatement.setString(1, newContent.getTitle());
@@ -80,7 +80,7 @@ public class IssueModel implements ToJsonStr {
 
     public static void delete(long id) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
-                "DELETE * FROM issues WHERE id=?;"
+                "DELETE * FROM issue WHERE id=?;"
         );
         preparedStatement.setLong(1, id);
         preparedStatement.execute();
