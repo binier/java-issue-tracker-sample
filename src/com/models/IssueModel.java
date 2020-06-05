@@ -12,7 +12,7 @@ import com.json.ToJsonStr;
 
 public class IssueModel implements ToJsonStr {
 
-    private Integer id;
+    private Long id;
     private String title;
     private String description;
     private int severity;
@@ -20,7 +20,7 @@ public class IssueModel implements ToJsonStr {
     private Date createdDate;
     private Date statusChangeDate;
 
-    public static int insert(IssueModel issue) throws SQLException, IOException {
+    public static long insert(IssueModel issue) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
                 "INSERT INTO issues (title, description, severity, status, createdDate) VALUES (?, ?, ?, ?, ?);"
         );
@@ -49,7 +49,7 @@ public class IssueModel implements ToJsonStr {
         preparedStatement.execute();
     }
 
-    public static IssueModel update(int id, IssueModel newContent) throws SQLException, IOException {
+    public static IssueModel update(long id, IssueModel newContent) throws SQLException, IOException {
         DatabaseMetaData md = Database.getInstance().getConnection().getMetaData();
         ResultSet rs = md.getColumns(null, null, "issues", "title");
         if(rs.next()){
