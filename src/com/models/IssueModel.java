@@ -26,7 +26,7 @@ public class IssueModel {
         preparedStatement.setString(2, issue.getDescription());
         preparedStatement.setInt(3, issue.getSeverity());
         preparedStatement.setString(4, issue.getStatus());
-        preparedStatement.setDate(5, (java.sql.Date) issue.getCreatedDate());
+        preparedStatement.setDate(5, (java.sql.Date) new Date(System.currentTimeMillis()));
 
         preparedStatement.execute();
     }
@@ -54,13 +54,11 @@ public class IssueModel {
                 )
         );
 
-        java.sql.Date statusChangeDate = (java.sql.Date) new java.util.Date(System.currentTimeMillis());
-
         preparedStatement.setString(1, newContent.getTitle());
         preparedStatement.setString(2, newContent.getDescription());
         preparedStatement.setInt(3, newContent.getSeverity());
         preparedStatement.setString(4, newContent.getStatus());
-        preparedStatement.setDate(5, statusChangeDate);
+        preparedStatement.setDate(5, (java.sql.Date) new Date(System.currentTimeMillis()));
 
         preparedStatement.execute();
     }
@@ -78,8 +76,6 @@ public class IssueModel {
         this.description = description;
         this.severity = severity;
         this.status = status;
-
-        this.createdDate = new Date(System.currentTimeMillis());
     }
 
     public String getTitle() {
@@ -116,10 +112,6 @@ public class IssueModel {
 
     public Date getCreatedDate() {
         return createdDate;
-    }
-
-    public void setCreatedDate(Date date) {
-        this.createdDate = date;
     }
 
     public Date getStatusChangeDate() {
