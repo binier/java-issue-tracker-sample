@@ -58,12 +58,12 @@ public class IssueCommand implements Command {
     public ToJsonStr execute() throws IOException, SQLException, UnknownActionException {
         switch (this.action) {
             case "get":
-                return IssueModel.getById(this.arg.get("id").getAsInt());
+                return IssueModel.getById(this.arg.get("id").getAsLong());
             case "add":
                 return this.argToIssueModel().save();
             case "update":
                 return IssueModel.update(
-                        this.arg.get("id").getAsInt(),
+                        this.arg.get("id").getAsLong(),
                         this.argToIssueModel()
                 );
             default:
