@@ -71,7 +71,11 @@ public class ClientHandler {
             BufferedReader in = new BufferedReader(new InputStreamReader(this.sock.getInputStream()));
             String message;
             while((message = in.readLine()) != null) {
-                this.send(message);
+                try {
+                    this.send(MessageParser.parse(message).execute().toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             in.close();
             this.stop();
