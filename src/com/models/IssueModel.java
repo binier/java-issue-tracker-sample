@@ -171,6 +171,7 @@ public class IssueModel implements ToJsonStr {
         return this;
     }
 
+    @Override
     public String toJsonStr() {
         return new Gson().toJson(this);
     }

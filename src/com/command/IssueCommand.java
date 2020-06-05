@@ -34,6 +34,7 @@ public class IssueCommand implements Command {
         );
     }
 
+    @Override
     public ToJsonStr execute() throws IOException, SQLException, UnknownActionException {
         switch (this.action) {
             case "get":
