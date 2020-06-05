@@ -1,14 +1,12 @@
 package com.models;
 
-import com.logger.Server;
-
 import java.io.IOException;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import com.database.Database;
 
 public class IssueModel {
 
@@ -77,7 +75,7 @@ public class IssueModel {
     }
 
     public void insert(IssueModel issue) throws SQLException, IOException {
-        PreparedStatement preparedStatement = Server.getInstance().getConnection().prepareStatement(
+        PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
                 "INSERT INTO issues (title, description, date, severity, status, statusChangeDate) VALUES (?, ?, ?, ?, ?, ?);"
         );
         preparedStatement.setString(1, issue.getTitle());
@@ -91,7 +89,7 @@ public class IssueModel {
     }
 
     public void readByTitle(String issueTitle) throws SQLException, IOException {
-        PreparedStatement preparedStatement = Server.getInstance().getConnection().prepareStatement(
+        PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
                 "SELECT * FROM issues WHERE title=?;"
         );
         preparedStatement.setString(1,issueTitle);
@@ -99,14 +97,14 @@ public class IssueModel {
     }
 
     public void update(IssueModel newContent, IssueModel oldContent) throws SQLException, IOException {
-        DatabaseMetaData md = Server.getInstance().getConnection().getMetaData();
+        DatabaseMetaData md = Database.getInstance().getConnection().getMetaData();
         ResultSet rs = md.getColumns(null, null, "issues", "title");
         if(rs.next()){
             insert(newContent);
             return;
         }
 
-        PreparedStatement preparedStatement = Server.getInstance().getConnection().prepareStatement(
+        PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
                 String.format(
                         "UPDATE issues SET title=?, description=?, date=?, severity=?, status=? WHERE title={0}",
                         oldContent.getTitle()
@@ -126,7 +124,7 @@ public class IssueModel {
     }
 
     public void delete(String title) throws SQLException, IOException {
-        PreparedStatement preparedStatement = Server.getInstance().getConnection().prepareStatement(
+        PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
                 "DELETE * FROM issues WHERE title=?;"
         );
         preparedStatement.setString(1,title);
