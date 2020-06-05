@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
- * <h2>Individual client socket handler for <b>com.socket.Server</b>.</h2>
+ * <h2>Individual client socket handler for {@link Server com.socket.Server}.</h2>
  *
  * It listens to client socket in a new thread, handles incoming
  * messages,
@@ -20,8 +20,8 @@ public class ClientHandler {
     private Thread readerThread;
 
     /**
-     * <h2>initializes but does <b>NOT</b> start the <b>ClientHandler</b>.</h2>
-     * <b>ClientHandler.start()</b> needs to be called for handler to actually work.
+     * <h2>initializes but does <b>NOT</b> start the {@link ClientHandler ClientHandler}.</h2>
+     * {@link ClientHandler#start ClientHandler.start()} needs to be called for handler to actually work.
      *
      * @param sock client socket
      */
@@ -30,10 +30,11 @@ public class ClientHandler {
     }
 
     /**
-     * Creates and starts the <b>readerThread</b>, which runs <b>ClientHandler.runReader()</b>.
+     * Creates and starts the {@link ClientHandler#readerThread readerThread},
+     * which runs {@link ClientHandler#runReader ClientHandler.runReader()}.
      * <br/><br/>
-     * It also initializes output <b>PrintWriter</b>, which is necessary for
-     * <b>ClientHandler.send(message)</b>
+     * It also initializes output {@link PrintWriter PrintWriter}, which is
+     * necessary for {@link ClientHandler#send ClientHandler.send(...)}
      */
     public synchronized void start() {
         try {
@@ -89,7 +90,7 @@ public class ClientHandler {
     /**
      * <h2>Send message to client socket</h2>
      *
-     * ClientHandler <b>NEEDS</b> to be started (<b>ClientHandler.start()</b>)
+     * ClientHandler <b>NEEDS</b> to be started ({@link ClientHandler#start ClientHandler.start()})
      * for this command to work.
      *
      * @param message

@@ -18,7 +18,7 @@ public class Server implements Runnable {
     /**
      * <h2>Initializes but does <b>NOT</b> start the <b>Server</b>.</h2>
      *
-     * <b>Server.start()</b> needs to be called for it to actually work.
+     * {@link Server#start Server.start()} needs to be called for it to actually work
      *
      * @param port
      * @param logger
@@ -29,8 +29,8 @@ public class Server implements Runnable {
     }
 
     /**
-     * Initializes socket server and runs <b>Server.run</b>
-     * in a new thread.
+     * Initializes socket server and runs
+     * {@link Server#run Server.run()} in a new thread.
      *
      * @throws IOException
      */
@@ -43,8 +43,8 @@ public class Server implements Runnable {
     /**
      * <h2>Run loop to accept connections</h2>
      *
-     * For each new connection it creates new <b>ClientHandler</b>
-     * and calls <b>start</b> on it.
+     * For each new connection it creates new {@link ClientHandler ClientHandler}
+     * and calls {@link ClientHandler#start ClientHandler.start()} on it.
      */
     @Override
     public void run() {
