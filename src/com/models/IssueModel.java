@@ -65,31 +65,19 @@ public class IssueModel implements ToJsonStr {
     }
 
     public static IssueModel update(long id, IssueModel newContent) throws SQLException, IOException {
-        DatabaseMetaData md = Database.getInstance().getConnection().getMetaData();
-        ResultSet rs = md.getColumns(null, null, "issues", "title");
-        if(rs.next()){
-            newContent.id = insert(newContent);
-            return newContent;
-        }
-
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
-                String.format(
-                        "UPDATE issues SET title=?, description=?, severity=?, status=?, statusChangeDate=? WHERE id={0}",
-                        id
-                )
+                "UPDATE issues SET title=?, description=?, severity=?, status=? WHERE id=?"
         );
 
         preparedStatement.setString(1, newContent.getTitle());
         preparedStatement.setString(2, newContent.getDescription());
         preparedStatement.setInt(3, newContent.getSeverity());
         preparedStatement.setString(4, newContent.getStatus());
-        preparedStatement.setDate(5, (java.sql.Date) new Date(System.currentTimeMillis()));
+        preparedStatement.setLong(5, id);
 
         preparedStatement.execute();
 
-        // TODO: return result from update query if possible to get all the fields.
-        newContent.id = id;
-        return newContent;
+        return IssueModel.getById(id);
     }
 
     public static void delete(String title) throws SQLException, IOException {
@@ -101,6 +89,7 @@ public class IssueModel implements ToJsonStr {
     }
 
     static IssueModel fromResultSet(ResultSet rs) throws SQLException {
+        rs.next();
         IssueModel issue = new IssueModel(
                 rs.getString("title"),
                 rs.getString("description"),
