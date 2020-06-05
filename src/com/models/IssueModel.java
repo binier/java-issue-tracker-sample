@@ -19,14 +19,14 @@ public class IssueModel {
 
     public static void insert(IssueModel issue) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
-                "INSERT INTO issues (title, description, severity, status, createdDate, statusChangeDate) VALUES (?, ?, ?, ?, ?, ?);"
+                "INSERT INTO issues (title, description, severity, status, createdDate) VALUES (?, ?, ?, ?, ?);"
         );
+
         preparedStatement.setString(1, issue.getTitle());
         preparedStatement.setString(2, issue.getDescription());
         preparedStatement.setInt(3, issue.getSeverity());
         preparedStatement.setString(4, issue.getStatus());
         preparedStatement.setDate(5, (java.sql.Date) issue.getCreatedDate());
-        preparedStatement.setDate(6, (java.sql.Date) issue.getCreatedDate());
 
         preparedStatement.execute();
     }
