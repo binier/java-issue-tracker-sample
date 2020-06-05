@@ -75,7 +75,7 @@ public class ClientHandler {
             String message;
             while((message = in.readLine()) != null) {
                 try {
-                    this.send(IssueCommand.fromJsonStr(message).execute().toJsonStr());
+                    this.send(IssueCommand.fromJson(message).execute().toJsonStr());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

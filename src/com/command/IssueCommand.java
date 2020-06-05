@@ -13,11 +13,14 @@ public class IssueCommand implements Command {
     private String action;
     private JsonObject arg;
 
-    public static IssueCommand fromJsonStr(String jsonStr) {
-        Gson gson = new Gson();
-        JsonObject obj = gson.fromJson(jsonStr, JsonObject.class);
+    public static IssueCommand fromJson(String jsonStr) {
+        return IssueCommand.fromJson(
+                new Gson().fromJson(jsonStr, JsonObject.class)
+        );
+    }
 
-        return new IssueCommand(obj.get("action").getAsString(), obj);
+    public static IssueCommand fromJson(JsonObject jObj) {
+        return new IssueCommand(jObj.get("action").getAsString(), jObj);
     }
 
     IssueCommand(String action, JsonObject arg) {
