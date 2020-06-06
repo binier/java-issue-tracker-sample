@@ -54,7 +54,7 @@ public class Server implements Runnable {
             try {
                 ClientHandler client = new ClientHandler(this.sock.accept());
                 client.start();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
