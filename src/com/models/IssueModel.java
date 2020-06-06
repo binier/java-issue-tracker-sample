@@ -123,10 +123,9 @@ public class IssueModel implements ToJsonStr {
      */
     public static void delete(long id) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
-                "DELETE * FROM issue WHERE id=?;"
+                "DELETE FROM issue where id="+id
         );
-        preparedStatement.setLong(1, id);
-        preparedStatement.execute();
+        preparedStatement.executeUpdate();
     }
 
     /**
