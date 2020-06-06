@@ -10,9 +10,14 @@ import java.sql.Statement;
 public class CreateDatabase extends Database {
     public static void main(String[] args) throws SQLException, IOException {
         createDatabase();
-        createIssueTable();
+        createTables();
         createIssueTrigger();
     }
+
+    /**
+     * Check if connection is success and database don't exist
+     * Create new database and name will be Database DB_NAME parameter
+     */
 
     public static void createDatabase() throws SQLException, IOException {
         try {
@@ -35,13 +40,20 @@ public class CreateDatabase extends Database {
         }
     }
 
-    public static void createIssueTable() throws SQLException, IOException {
+    /**
+     * Create statements for two table issue and comment
+     * Insert into database this two table
+     */
+
+    public static void createTables() throws SQLException, IOException {
         try {
             Statement stmt = getInstance().getConnection().createStatement();
-            String createTable = "CREATE TABLE IF NOT EXISTS issue (id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, title VARCHAR(255), description VARCHAR(255), severity INTEGER, status VARCHAR(255),createdDate DATETIME DEFAULT CURRENT_TIMESTAMP,statusChangeDate DATETIME )";
-            //To create database
-            stmt.executeUpdate(createTable);
-            System.out.println("Table created!");
+            String createIssues = "CREATE TABLE IF NOT EXISTS issue (id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, title VARCHAR(255), description VARCHAR(255), severity INTEGER, status VARCHAR(255),createdDate DATETIME DEFAULT CURRENT_TIMESTAMP,statusChangeDate DATETIME )";
+            String createComment = "CREATE TABLE IF NOT EXISTS comment (id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, issueId INTEGER, text VARCHAR(255), severity INTEGER, status VARCHAR(255),createdDate DATETIME DEFAULT CURRENT_TIMESTAMP)";
+            //To create table
+            stmt.executeUpdate(createIssues);
+            stmt.executeUpdate(createComment);
+            System.out.println("Tables created!");
 
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
