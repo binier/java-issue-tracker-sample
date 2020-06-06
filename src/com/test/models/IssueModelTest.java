@@ -93,6 +93,18 @@ class IssueModelTest {
     }
 
     @Test
+    void getCreatedDate() {
+        IssueModel issueModel = new IssueModel("same","description1",2,"status1");
+        assertEquals(issueModel.getCreatedDate(),null);
+    }
+
+    @Test
+    void getStatusChangeDate() {
+        IssueModel issueModel = new IssueModel("same","description1",2,"status1");
+        assertEquals(issueModel.getStatusChangeDate(),null);
+    }
+
+    @Test
     void save() throws IOException, SQLException {
         IssueModel issueModel = new IssueModel("save2","save2",2,"status1");
         issueModel.save();

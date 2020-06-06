@@ -128,10 +128,9 @@ public class CommentModel implements ToJsonStr {
      */
     public static void delete(long id) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
-                "DELETE * FROM comment WHERE id=?;"
+                "DELETE FROM comment where id="+id
         );
-        preparedStatement.setLong(1, id);
-        preparedStatement.execute();
+        preparedStatement.executeUpdate();
     }
 
     static CommentModel fromResultSet(ResultSet rs) throws SQLException {
@@ -166,7 +165,7 @@ public class CommentModel implements ToJsonStr {
      *
      * @param title  the String to display.
      */
-    public void setText(String title) {
+    public void setText(String text) {
         this.text = text;
     }
 

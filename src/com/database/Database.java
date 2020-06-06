@@ -12,7 +12,7 @@ public class Database {
     protected static final String OPTIONS = "?useSSL=false&createDatabaseIfNotExist=true";
     protected static final String CONNECTION_STRING =  "jdbc:mysql://127.0.0.1:3306/" + DB_NAME + OPTIONS;
     private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "12345678";
 
     private Connection connection;
 
