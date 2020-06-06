@@ -18,6 +18,15 @@ public class CommentModel implements ToJsonStr {
     private Date createdDate;
     private long issueId;
 
+    /**
+     * Insert CommentModel into database
+     *
+     * @param  comment  Issue model object
+     * @return database insert statement
+     *
+     * @throws SQLException
+     * @throws IOException
+     */
     public static long insert(CommentModel comment) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
                 "INSERT INTO comment (text, issueID) VALUES (?, ?);",
@@ -43,6 +52,14 @@ public class CommentModel implements ToJsonStr {
         }
     }
 
+    /**
+     * comment table find by isueId row and return.
+     *
+     * @param issueId int
+     *
+     * @throws SQLException
+     * @throws IOException
+     */
     public static ToJsonStrWrapper<List<CommentModel>> getByIssueId(long issueId) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
                 "SELECT * FROM comment WHERE issueId=?;"
@@ -60,6 +77,14 @@ public class CommentModel implements ToJsonStr {
         return new ToJsonStrWrapper(list);
     }
 
+    /**
+     * comment table find by id row and return.
+     *
+     * @param id int
+     *
+     * @throws SQLException
+     * @throws IOException
+     */
     public static CommentModel getById(long id) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
                 "SELECT * FROM comment WHERE id=?;"
@@ -70,6 +95,15 @@ public class CommentModel implements ToJsonStr {
         return CommentModel.fromResultSet(preparedStatement.getResultSet());
     }
 
+    /**
+     * comment table find by id row and update.
+     *
+     * @param id int
+     * @param newContent CommentModel
+     *
+     * @throws SQLException
+     * @throws IOException
+     */
     public static CommentModel update(long id, CommentModel newContent) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
                 "UPDATE comment SET text=?, issueId=? WHERE id=?"
@@ -84,6 +118,14 @@ public class CommentModel implements ToJsonStr {
         return CommentModel.getById(id);
     }
 
+    /**
+     * comment table find by id row and delete.
+     *
+     * @param id int
+     *
+     * @throws SQLException
+     * @throws IOException
+     */
     public static void delete(long id) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
                 "DELETE * FROM comment WHERE id=?;"
@@ -105,6 +147,11 @@ public class CommentModel implements ToJsonStr {
         return comment;
     }
 
+    /**
+     * Parameter constructor.
+     * @param text
+     * @param issueId
+     */
     public CommentModel(String text, long issueId) {
         this.text = text;
         this.issueId = issueId;
@@ -114,18 +161,36 @@ public class CommentModel implements ToJsonStr {
         return text;
     }
 
+    /**
+     * Registers text in a CommentModel
+     *
+     * @param title  the String to display.
+     */
     public void setText(String title) {
         this.text = text;
     }
 
+    /**
+     * Return CommentModel issueid
+     * type is int
+     */
     public long getIssueId() {
         return issueId;
     }
 
+    /**
+     * Registers issueid in a CommentModel
+     *
+     * @param issueId  the int to display.
+     */
     public void setIssueId(long issueId) {
         this.issueId = issueId;
     }
 
+    /**
+     * Return CommentModel createdDate
+     * type is Date
+     */
     public Date getCreatedDate() {
         return createdDate;
     }

@@ -17,6 +17,8 @@ public class CreateDatabase extends Database {
     /**
      * Check if connection is success and database don't exist
      * Create new database and name will be Database DB_NAME parameter
+     * @throws SQLException
+     * @throws IOException
      */
 
     public static void createDatabase() throws SQLException, IOException {
@@ -43,6 +45,8 @@ public class CreateDatabase extends Database {
     /**
      * Create statements for two table issue and comment
      * Insert into database this two table
+     * @throws SQLException
+     * @throws IOException
      */
 
     public static void createTables() throws SQLException, IOException {

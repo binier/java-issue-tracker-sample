@@ -17,6 +17,16 @@ public class IssueModel implements ToJsonStr {
     private Date createdDate;
     private Date statusChangeDate;
 
+    /**
+     * Insert issue model into database
+     *
+     * @param  issue  Issue model object
+     * @return database insert statement
+     *
+     * @throws SQLException
+     * @throws IOException
+     */
+
     public static long insert(IssueModel issue) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
                 "INSERT INTO issue (title, description, severity, status) VALUES (?, ?, ?, ?);",
@@ -44,6 +54,14 @@ public class IssueModel implements ToJsonStr {
         }
     }
 
+    /**
+     * find and return issue record by id
+     *
+     * @param id int
+     *
+     * @throws SQLException
+     * @throws IOException
+     */
     public static IssueModel getById(long id) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
                 "SELECT * FROM issue WHERE id=?;"
@@ -54,6 +72,14 @@ public class IssueModel implements ToJsonStr {
         return IssueModel.fromResultSet(preparedStatement.getResultSet());
     }
 
+    /**
+     * find and return issue record by title
+     *
+     * @param issueTitle string
+     *
+     * @throws SQLException
+     * @throws IOException
+     */
     public static void readByTitle(String issueTitle) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
                 "SELECT * FROM issue WHERE title=?;"
@@ -62,6 +88,15 @@ public class IssueModel implements ToJsonStr {
         preparedStatement.execute();
     }
 
+    /**
+     * issue table find by id row and delete.
+     *
+     * @param id int
+     * @param newContent issueModel
+     *
+     * @throws SQLException
+     * @throws IOException
+     */
     public static IssueModel update(long id, IssueModel newContent) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
                 "UPDATE issue SET title=?, description=?, severity=?, status=? WHERE id=?"
@@ -78,6 +113,14 @@ public class IssueModel implements ToJsonStr {
         return IssueModel.getById(id);
     }
 
+    /**
+     * issue table find by id row and delete.
+     *
+     * @param id int
+     *
+     * @throws SQLException
+     * @throws IOException
+     */
     public static void delete(long id) throws SQLException, IOException {
         PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(
                 "DELETE * FROM issue WHERE id=?;"
@@ -86,6 +129,11 @@ public class IssueModel implements ToJsonStr {
         preparedStatement.execute();
     }
 
+    /**
+     * return issue.
+     *
+     * @param rs ResultSet object
+     */
     static IssueModel fromResultSet(ResultSet rs) throws SQLException {
         if (!rs.next()) return null;
         IssueModel issue = new IssueModel(
@@ -102,6 +150,14 @@ public class IssueModel implements ToJsonStr {
         return issue;
     }
 
+    /**
+     * Parameter constructor.
+     * @param title
+     * @param description
+     * @param severity
+     * @param status
+     */
+
     public IssueModel(String title, String description, int severity, String status) {
         this.title = title;
         this.description = description;
@@ -109,46 +165,93 @@ public class IssueModel implements ToJsonStr {
         this.status = status;
     }
 
+    /**
+     * Return issueModel title
+     * type is String
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Registers title in a IssueModel
+     *
+     * @param title  the string to display.
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * Return issueModel description
+     * type is String
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Registers description in a issue model
+     *
+     * @param description  the string to display.
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Return issueModel severity
+     * type is int
+     */
     public int getSeverity() {
         return severity;
     }
 
+    /**
+     * Registers severity in a issue model
+     *
+     * @param severity  the int to display.
+     */
     public void setSeverity(int severity) {
         this.severity = severity;
     }
 
+    /**
+     * Return issueModel status
+     * type is String
+     */
     public String getStatus() {
         return status;
     }
 
+    /**
+     * Registers status in a issue model
+     *
+     * @param status  the String to display.
+     */
     public void setStatus(String status) {
         this.status = status;
     }
 
+    /**
+     * Return issueModel createdDATE
+     * type is Date
+     */
     public Date getCreatedDate() {
         return createdDate;
     }
 
+    /**
+     * Return issueModel statusChangeDate
+     * type is Date
+     */
     public Date getStatusChangeDate() {
         return statusChangeDate;
     }
 
+    /**
+     * Saves the current record.
+     */
     public IssueModel save() throws SQLException, IOException {
         if (this.id == null) {
             this.id = IssueModel.insert(this);
